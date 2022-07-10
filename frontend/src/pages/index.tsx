@@ -1,12 +1,13 @@
 import Head from 'next/head'
-import { FormEvent, useState, useContext } from 'react'
-import { AuthContext } from '../contexts/AuthContext'
+import { FormEvent, useState } from 'react'
+
+import { useAuth } from '../hooks/useAuth'
 
 export default function Home() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const { signIn } = useContext(AuthContext)
+  const { signIn } = useAuth()
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
