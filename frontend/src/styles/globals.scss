@@ -1,0 +1,112 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  background: #f2f2f2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+div.container {
+  display: flex;
+  align-items: center;
+  justify-content:  center;
+  height: 100vh;
+}
+
+ $primary: #5596ef;
+ $secondary: #66a1d1;
+ $white: #fff;
+ $gray: #757575;
+
+form {
+  width: min(300px, 100%);
+  display: flex;
+  flex-direction: column;
+
+    .form__group {
+      position: relative;
+      padding: 15px 0 0;
+      margin-top: 10px;
+    }
+
+    .form__field {
+      font-family: inherit;
+      width: 100%;
+      border: 0;
+      outline: 0;
+      border-bottom: 1px solid $gray;
+      font-size: 1rem;
+      padding: 7px 0;
+      background: transparent;
+      transition: border-color 0.2s;
+
+      &::placeholder {
+        color: transparent;
+      }
+
+      &:placeholder-shown ~ .form__label {
+        font-size: 1.1rem;
+        cursor: text;
+        top: 20px;
+      }
+
+      &:focus {
+        padding-bottom: 6px;
+        font-weight: 700;
+        border-width: 2px;
+        border-image: linear-gradient(to right, $primary, $secondary);
+        border-image-slice: 1;
+
+        ~ .form__label {
+          position: absolute;
+          top: 0;
+          display: block;
+          transition: 0.2s;
+          font-size: 0.8rem;
+          color: $primary;
+          font-weight: 400;
+        }
+      }
+
+      &:required, &invalid {
+        box-shadow: none;
+      }
+    }
+
+    .form__label {
+      position: absolute;
+      top: 0;
+      display: block;
+      transition: 0.2s;
+      font-size: 0.8rem;
+      color: gray;
+      font-weight: 400;
+      width: 50%;
+    }
+
+    button {
+      border-radius: 10px;
+      border: 0;
+      padding: 10px 40px;
+      background: $primary;
+      color: #FFF;
+      font-weight: 500;
+      font-size: 1.1rem;
+      margin-top: 20px;
+      transition: background 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        background: $secondary;
+      }
+    }
+}
