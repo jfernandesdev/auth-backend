@@ -1,7 +1,13 @@
+import { useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { api } from '../services/api';
 
 export default function Dashboard() {
   const { signOut, user } = useAuth();
+
+  useEffect(() => {
+    api.get('/me').then(response => console.log(`Teste de requisição dentro do dashboard: ${response}`))
+  }, [])
 
   return (
     <div className='container'>
