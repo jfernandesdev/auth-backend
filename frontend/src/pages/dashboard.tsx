@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { signOut } from '../contexts/AuthContext'
 
 import { useAuth } from '../hooks/useAuth'
@@ -28,7 +29,7 @@ export default function Dashboard() {
         <p>{user?.email}</p>
 
         <Can permissions={['metrics.list']}>
-            <div>Métricas 📊</div>
+          <Link href='/metrics'><button>Métricas 📊</button></Link>
         </Can>
       </div>
     </div>
