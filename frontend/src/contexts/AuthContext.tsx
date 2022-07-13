@@ -16,7 +16,8 @@ type SignInCredentials = {
 }
 
 type AuthContextData = {
-  signIn(credentials: SignInCredentials): Promise<void>
+  signIn: (credentials: SignInCredentials) => Promise<void>
+  signOut: (broadcast?: boolean) => void
   user: User
   isAuthenticated: boolean
 }
@@ -27,9 +28,14 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
-export function signOut() {
+let authChannel: BroadcastChannel
+
+
+export function signOut(broadcast: boolean = true) {
   destroyCookie(undefined, 'appnextauth@token')
   destroyCookie(undefined, 'appnextauth@refreshToken')
+
+  if(broadcast) authChannel.postMessage('signOut')
 
   Router.push('/')
 }
@@ -39,17 +45,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user
 
   useEffect(() => {
+    authChannel = new BroadcastChannel('auth')
+
+    authChannel.onmessage = (message) => {
+      switch (message.data) {
+        case 'signOut':
+         signOut(false)
+          break
+        case 'signIn':
+          Router.push('/dashboard')
+          break
+        default:
+          break
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     const { 'appnextauth@token': token } = parseCookies()
 
     if (token) {
-      api.get('/me')
-      .then(response => {
-        const { email, permissions, roles } = response.data
+      api
+        .get('/me')
+        .then(response => {
+          const { email, permissions, roles } = response.data
 
-        setUser({email,  permissions, roles })
-      }).catch(() => {
-        signOut()
-      })
+          setUser({ email, permissions, roles })
+        })
+        .catch(() => {
+          signOut()
+        })
     }
   }, [])
 
@@ -80,14 +105,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`
 
+      if (authChannel) authChannel.postMessage('signIn');
       Router.push('/dashboard')
+
     } catch (error) {
       console.log(error.message)
     }
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, user, isAuthenticated }}>
+    <AuthContext.Provider value={{ signIn, signOut, user, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )

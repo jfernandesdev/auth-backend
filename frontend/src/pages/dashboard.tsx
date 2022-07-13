@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
-import { signOut } from '../contexts/AuthContext'
 
 import { useAuth } from '../hooks/useAuth'
 
@@ -11,7 +10,7 @@ import { withSSRAuth } from '../utils/withSSRAuth'
 import { Can } from '../components/Can'
 
 export default function Dashboard() {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
 
   useEffect(() => {
     api
@@ -23,7 +22,7 @@ export default function Dashboard() {
   return (
     <div className='container'>
       <div>
-        <button className='btnExit' onClick={signOut}>Sair</button>
+        <button className='btnExit' onClick={() => signOut(true)}>Sair</button>
 
         <h1 className='hello'><span>Hello</span> World!</h1>
         <p>{user?.email}</p>
