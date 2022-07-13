@@ -14,7 +14,7 @@ export function seedUserStore() {
 
   users.set('fulano@teste.com', {
     password: '12345',
-    permissions: ['users.list', 'metrics.list'],
+    permissions: ['users.list'],
     roles: ['editor']
   })
 }
